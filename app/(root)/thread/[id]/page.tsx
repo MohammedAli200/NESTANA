@@ -9,7 +9,13 @@ import { fetchThreadById } from "@/lib/actions/thread.actions";
 
 export const revalidate = 0;
 
-async function page({ params }: { params: { id: string } }) {
+type PageProps = {
+  params: { id: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
+};
+
+
+async function page({ params }: PageProps): Promise<JSX.Element> {
   if (!params.id) return null;
 
   const user = await currentUser();

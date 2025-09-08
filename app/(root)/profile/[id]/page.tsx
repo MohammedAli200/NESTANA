@@ -10,9 +10,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { fetchUser } from "@/lib/actions/user.actions";
 
-async function Page({ params }: { params: { id: string } }) {
+type PageProps = {
+  params: { id: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
+};
+
+async function Page({ params }: PageProps): Promise<JSX.Element> {
   const user = await currentUser();
-  if (!user) return null;
+  if (!user) {
+    redirect("/sign-in");
+  }
 
   const userInfo = await fetchUser(params.id);
   if (!userInfo?.onboarded) redirect("/onboarding");
