@@ -1,38 +1,141 @@
+// import mongoose from "mongoose";
+
+// const communitySchema = new mongoose.Schema({
+//   id: {
+//     type: String,
+//     required: true,
+//   },
+//   username: {
+//     type: String,
+//     unique: true,
+//     required: true,
+//   },
+//   name: {
+//     type: String,
+//     required: true,
+//   },
+//   image: String,
+//   bio: String,
+//   createdBy: {
+//     type: mongoose.Schema.Types.ObjectId,
+//     ref: "User",
+//   },
+//   threads: [
+//     {
+//       type: mongoose.Schema.Types.ObjectId,
+//       ref: "Thread",
+//     },
+//   ],
+//   members: [
+//     {
+//       type: mongoose.Schema.Types.ObjectId,
+//       ref: "User",
+//     },
+//   ],
+// });
+
+// const Community =
+//   mongoose.models.Community || mongoose.model("Community", communitySchema);
+
+// export default Community;
+
+
+
+
+// import mongoose from "mongoose";
+
+// const communitySchema = new mongoose.Schema({
+//   id: {
+//     type: String,
+//     required: true,
+//   },
+//   username: {
+//     type: String,
+//     unique: true,
+//     required: true,
+//   },
+//   name: {
+//     type: String,
+//     required: true,
+//   },
+//   image: String,
+//   bio: String,
+//   createdBy: {
+//     type: mongoose.Schema.Types.ObjectId,
+//     ref: "User",
+//   },
+//   threads: [
+//     {
+//       type: mongoose.Schema.Types.ObjectId,
+//       ref: "Thread",
+//     },
+//   ],
+//   members: [
+//     {
+//       type: mongoose.Schema.Types.ObjectId,
+//       ref: "User",
+//     },
+//   ],
+// });
+
+// const Community =
+//   mongoose.models.Community || mongoose.model("Community", communitySchema);
+
+// export default Community;
+
+
+
+
+
+
+
+
+
 import mongoose from "mongoose";
 
-const communitySchema = new mongoose.Schema({
-  id: {
-    type: String,
-    required: true,
-  },
-  username: {
-    type: String,
-    unique: true,
-    required: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  image: String,
-  bio: String,
-  createdBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  },
-  threads: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Thread",
+const communitySchema = new mongoose.Schema(
+  {
+    id: {
+      type: String,
+      required: true,
     },
-  ],
-  members: [
-    {
+    username: {
+      type: String,
+      unique: true,
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    image: String,
+    bio: String,
+    createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-  ],
-});
+    threads: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Thread",
+      },
+    ],
+    members: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+
+    // 👇 new field for visibility
+    visibility: {
+      type: String,
+      enum: ["public", "private"],
+      default: "public",
+    },
+  },
+  { timestamps: true }
+);
 
 const Community =
   mongoose.models.Community || mongoose.model("Community", communitySchema);

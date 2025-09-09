@@ -1,3 +1,43 @@
+// import mongoose from "mongoose";
+
+// const threadSchema = new mongoose.Schema({
+//   text: {
+//     type: String,
+//     required: true,
+//   },
+//   author: {
+//     type: mongoose.Schema.Types.ObjectId,
+//     ref: "User",
+//     required: true,
+//   },
+//   community: {
+//     type: mongoose.Schema.Types.ObjectId,
+//     ref: "Community",
+//   },
+//   createdAt: {
+//     type: Date,
+//     default: Date.now,
+//   },
+//   parentId: {
+//     type: String,
+//   },
+//   children: [
+//     {
+//       type: mongoose.Schema.Types.ObjectId,
+//       ref: "Thread",
+//     },
+//   ],
+//   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+// });
+
+// const Thread = mongoose.models.Thread || mongoose.model("Thread", threadSchema);
+
+// export default Thread;
+
+
+
+
+
 import mongoose from "mongoose";
 
 const threadSchema = new mongoose.Schema({
@@ -11,7 +51,7 @@ const threadSchema = new mongoose.Schema({
     required: true,
   },
   community: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String, // <-- changed from ObjectId to String
     ref: "Community",
   },
   createdAt: {
@@ -27,7 +67,6 @@ const threadSchema = new mongoose.Schema({
       ref: "Thread",
     },
   ],
-  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
 
 const Thread = mongoose.models.Thread || mongoose.model("Thread", threadSchema);
