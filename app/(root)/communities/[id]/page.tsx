@@ -291,25 +291,89 @@
 
 
 
-import ProfileHeader from "@/components/shared/ProfileHeader";
-import ThreadsTab, { Thread } from "@/components/shared/ThreadsTab";
-import UserCard from "@/components/cards/UserCard";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { fetchCommunityDetails, fetchCommunityPosts } from "@/lib/actions/community.actions";
-import { communityTabs } from "@/constants";
+// import ProfileHeader from "@/components/shared/ProfileHeader";
+// import ThreadsTab, { Thread } from "@/components/shared/ThreadsTab";
+// import UserCard from "@/components/cards/UserCard";
+// import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+// import { fetchCommunityDetails, fetchCommunityPosts } from "@/lib/actions/community.actions";
+// import { communityTabs } from "@/constants";
 
-type PageProps = { params: { id: string } };
+// type PageProps = { params: { id: string } };
+
+// export default async function Page({ params }: PageProps) {
+//   const community = await fetchCommunityDetails(params.id);
+//   if (!community) return <p>Community not found</p>;
+
+//   const threads: Thread[] = await fetchCommunityPosts(community._id);
+
+//   return (
+//     <section>
+//       <ProfileHeader
+//         accountId={community.createdById}
+//         authUserId={community.createdById}
+//         name={community.name}
+//         username={community.username}
+//         imgUrl={community.image}
+//         bio={community.bio}
+//         type="Community"
+//       />
+
+//       <div className="mt-9">
+//         <Tabs defaultValue="threads">
+//           <TabsList>
+//             {communityTabs.map((tab) => (
+//               <TabsTrigger key={tab.value} value={tab.value}>
+//                 {tab.label}
+//               </TabsTrigger>
+//             ))}
+//           </TabsList>
+
+//           <TabsContent value="threads">
+//             <ThreadsTab threads={threads} />
+//           </TabsContent>
+
+//           <TabsContent value="members">
+//             {community.members.map((member) => (
+//               <UserCard key={member.id} {...member} personType="User" />
+//             ))}
+//           </TabsContent>
+
+//           <TabsContent value="requests">
+//             <p>No requests yet.</p>
+//           </TabsContent>
+//         </Tabs>
+//       </div>
+//     </section>
+//   );
+// }
+
+
+
+
+import ProfileHeader from "@/components/shared/ProfileHeader"
+import ThreadsTab from "@/components/shared/ThreadsTab"
+import UserCard from "@/components/cards/UserCard"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  fetchCommunityDetails,
+  fetchCommunityPosts,
+} from "@/lib/actions/community.actions"
+import { communityTabs } from "@/constants"
+
+type PageProps = { params: { id: string } }
 
 export default async function Page({ params }: PageProps) {
-  const community = await fetchCommunityDetails(params.id);
-  if (!community) return <p>Community not found</p>;
+  // ✅ Fetch community details by Clerk org.id
+  const community = await fetchCommunityDetails(params.id)
+  if (!community) return <p>Community not found</p>
 
-  const threads: Thread[] = await fetchCommunityPosts(community._id);
+  // ✅ Fetch threads by MongoDB _id
+  const threads = await fetchCommunityPosts(community._id)
 
   return (
     <section>
       <ProfileHeader
-        accountId={community.createdById}
+        accountId={community._id} // 🔑 Mongo _id for refs
         authUserId={community.createdById}
         name={community.name}
         username={community.username}
@@ -319,7 +383,7 @@ export default async function Page({ params }: PageProps) {
       />
 
       <div className="mt-9">
-        <Tabs defaultValue="threads">
+        <Tabs defaultValue="threads" className="w-full">
           <TabsList>
             {communityTabs.map((tab) => (
               <TabsTrigger key={tab.value} value={tab.value}>
@@ -328,21 +392,32 @@ export default async function Page({ params }: PageProps) {
             ))}
           </TabsList>
 
+          {/* Threads Tab */}
           <TabsContent value="threads">
-            <ThreadsTab threads={threads} />
+            <ThreadsTab
+              threads={threads}
+              accountId={community._id}
+              accountType="Community"
+            />
           </TabsContent>
 
+          {/* Members Tab */}
           <TabsContent value="members">
-            {community.members.map((member) => (
-              <UserCard key={member.id} {...member} personType="User" />
-            ))}
+            {community.members.length === 0 ? (
+              <p className="no-result">No members yet</p>
+            ) : (
+              community.members.map((member) => (
+                <UserCard key={member.id} {...member} personType="User" />
+              ))
+            )}
           </TabsContent>
 
+          {/* Requests Tab */}
           <TabsContent value="requests">
             <p>No requests yet.</p>
           </TabsContent>
         </Tabs>
       </div>
     </section>
-  );
+  )
 }

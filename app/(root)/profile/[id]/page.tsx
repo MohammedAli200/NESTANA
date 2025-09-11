@@ -1,3 +1,90 @@
+// import Image from "next/image";
+// import { currentUser } from "@clerk/nextjs/server";
+// import { redirect } from "next/navigation";
+
+// import { profileTabs } from "@/constants";
+
+// import ThreadsTab from "@/components/shared/ThreadsTab";
+// import ProfileHeader from "@/components/shared/ProfileHeader";
+// import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+// import { fetchUser } from "@/lib/actions/user.actions";
+
+// type PageProps = {
+//   params: { id: string };
+//   searchParams?: { [key: string]: string | string[] | undefined };
+// };
+
+// async function Page({ params }: PageProps): Promise<JSX.Element> {
+//   const user = await currentUser();
+//   if (!user) {
+//     redirect("/sign-in");
+//   }
+
+//   const userInfo = await fetchUser(params.id);
+//   if (!userInfo?.onboarded) redirect("/onboarding");
+
+//   return (
+//     <section>
+//       <ProfileHeader
+//         accountId={userInfo.id}
+//         authUserId={user.id}
+//         name={userInfo.name}
+//         username={userInfo.username}
+//         imgUrl={userInfo.image}
+//         bio={userInfo.bio}
+//       />
+
+//       <div className='mt-9 '>
+//         <Tabs defaultValue='threads' className='w-full'>
+//           <TabsList className='tab'>
+//             {profileTabs.map((tab) => (
+//               <TabsTrigger key={tab.label} value={tab.value} className='tab'>
+//                 <Image
+//                   src={tab.icon}
+//                   alt={tab.label}
+//                   width={24}
+//                   height={24}
+//                   className='object-contain'
+//                 />
+//                 <p className='max-sm:hidden'>{tab.label}</p>
+
+//                 {tab.label === "Threads" && (
+//                   <p className='ml-1 rounded-sm bg-light-4 px-2 py-1 !text-tiny-medium text-dark-2'>
+//                     {userInfo.threads.length}
+//                   </p>
+//                 )}
+//               </TabsTrigger>
+//             ))}
+//           </TabsList>
+//           {profileTabs.map((tab) => (
+//             <TabsContent
+//               key={`content-${tab.label}`}
+//               value={tab.value}
+//               className='w-full text-dark-2'
+//             >
+//               {/* @ts-ignore */}
+//               <ThreadsTab
+//                 currentUserId={user.id}
+//                 accountId={userInfo.id}
+//                 accountType='User'
+//               />
+//             </TabsContent>
+//           ))}
+//         </Tabs>
+//       </div>
+//     </section>
+//   );
+// }
+// export default Page;
+
+
+
+
+
+
+
+
 import Image from "next/image";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
@@ -10,16 +97,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { fetchUser } from "@/lib/actions/user.actions";
 
-type PageProps = {
-  params: { id: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
-};
-
-async function Page({ params }: PageProps): Promise<JSX.Element> {
+async function Page({ params }: { params: { id: string } }) {
   const user = await currentUser();
-  if (!user) {
-    redirect("/sign-in");
-  }
+  if (!user) return null;
 
   const userInfo = await fetchUser(params.id);
   if (!userInfo?.onboarded) redirect("/onboarding");
@@ -35,7 +115,7 @@ async function Page({ params }: PageProps): Promise<JSX.Element> {
         bio={userInfo.bio}
       />
 
-      <div className='mt-9 '>
+      <div className='mt-9'>
         <Tabs defaultValue='threads' className='w-full'>
           <TabsList className='tab'>
             {profileTabs.map((tab) => (
@@ -50,7 +130,7 @@ async function Page({ params }: PageProps): Promise<JSX.Element> {
                 <p className='max-sm:hidden'>{tab.label}</p>
 
                 {tab.label === "Threads" && (
-                  <p className='ml-1 rounded-sm bg-light-4 px-2 py-1 !text-tiny-medium text-dark-2'>
+                  <p className='ml-1 rounded-sm bg-light-4 px-2 py-1 !text-tiny-medium text-light-2'>
                     {userInfo.threads.length}
                   </p>
                 )}
@@ -61,7 +141,7 @@ async function Page({ params }: PageProps): Promise<JSX.Element> {
             <TabsContent
               key={`content-${tab.label}`}
               value={tab.value}
-              className='w-full text-dark-2'
+              className='w-full text-light-1'
             >
               {/* @ts-ignore */}
               <ThreadsTab
@@ -77,12 +157,3 @@ async function Page({ params }: PageProps): Promise<JSX.Element> {
   );
 }
 export default Page;
-
-
-
-
-
-
-
-
-
